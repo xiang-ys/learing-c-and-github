@@ -4,7 +4,7 @@
 
 using namespace std;
 
-/*int add(int x, int y) {
+int add(int x, int y) {
 	return x + y;
 }
 
@@ -43,7 +43,7 @@ int main() {
 	swap2(&c, &d);
 	printf("交换后的结果为%d, %d", c, d);
 }
-*/
+
 
 typedef struct fushu {
 	float re;
