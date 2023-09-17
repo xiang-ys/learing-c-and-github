@@ -10,12 +10,5 @@ int main() {
 	}
 	else
 		i = 0;
-	switch (i) {
-	case 1: {
-		cout << "用户名正确";
-	}break;
-	default:
-		cout << "用户名不正确";
-		break;
-	}
+	return 0;
 }
