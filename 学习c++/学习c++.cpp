@@ -1,20 +1,103 @@
-﻿// 学习c++.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
-
+﻿// 学习c++.cpp
 #include <iostream>
+#include<stdio.h>
+
+using namespace std;
+
+/*int add(int x, int y) {
+	return x + y;
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	int a = 10;
+	int b = 20;
+	int sum = add(a, b);
+	cout << a << "与" << b << "的和为" << sum;
+	return 0;
 }
 
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
 
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
+void swap(int& a, int& b) {
+	int temp = 0;
+	temp = a;
+	a = b;
+	b = temp;
+}
+
+void swap2(int* a, int* b) {
+	int temp = 0;
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+int main() {
+	int a, b, c, d;
+	printf("输入两个数\n");
+	scanf_s("%d %d", &a, &b);
+	swap(a, b);
+	printf("交换后的结果为%d, %d", a, b);
+	printf("再输入两个数\n");
+	scanf_s("%d %d",&c,&d);
+	swap2(&c, &d);
+	printf("交换后的结果为%d, %d", c, d);
+}
+*/
+
+typedef struct fushu {
+	float re;
+	float mag;
+};
+fushu add(fushu a,fushu b) {
+	fushu sum;
+	sum.re = a.re + b.re;
+	sum.mag = a.mag + b.mag;
+	printf("相加后的复数为%.2f+%.2fi\n", sum.re, sum.mag);
+	return sum;
+}
+fushu jian(fushu a, fushu b) {
+	fushu sum;
+	sum.re = a.re - b.re;
+	sum.mag = a.mag - b.mag;
+	printf("相减后的复数为%.2f+%.2fi\n", sum.re, sum.mag);
+	return sum;
+}
+fushu cheng(fushu a, fushu b) {
+	fushu sum;
+	sum.re = (a.re * b.re) - (a.mag * b.mag);
+	sum.mag = (a.mag * b.re) + (a.re * b.mag);
+	printf("相乘后的复数为%.2f+%.2fi\n", sum.re, sum.mag);
+	return sum;
+}
+fushu chu(fushu a, fushu b) {
+	fushu sum;
+	sum.re = ((a.re * b.re) + (a.mag * b.mag))
+		/ ((b.re) * (b.re) + (b.mag) * (b.mag));
+	sum.mag = ((a.mag * b.re) - (a.re) * (b.mag))
+		/ ((b.re) * (b.re) + (b.mag) * (b.mag));
+	printf("相除后的复数为%.2f+%.2fi\n", sum.re, sum.mag);
+	return sum;
+}
+void printffushu(fushu a) {
+	printf("%.2f+%.2fi\n", a.re, a.mag);
+}
+int main()
+{
+	fushu f1,f2;
+	f1.re = 12.34;
+	f1.mag = 45.23;
+	f2.re = 25.36;
+	f2.mag = 12.56;
+	fushu sum;
+	fushu shang;
+	fushu ji;
+	fushu cha;
+	printffushu(f1);
+	printffushu(f2);
+	sum = add(f1, f2);
+	cha = jian(f1, f2);
+	ji = cheng(f1, f2);
+	shang = chu(f1, f2);
+	return 0;
+}
