@@ -128,7 +128,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="学习c++.cpp" />
-    <ClCompile Include="学习线性表c++.cpp" />
     <ClCompile Include="线性表模版.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
