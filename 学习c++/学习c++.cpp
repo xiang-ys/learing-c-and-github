@@ -137,17 +137,30 @@ void ListOutput(SqList& L) {//输出数据
 	for (int i = 0; i < L.length; i++){//遍历线性表
 		cout << L.elem[i]<<'\t';
 	}
+	cout << endl;
 }
 
-
+void InsertData(SqList& L,int location,int num) {//插入(Insert)数据
+	L.length++;
+	for (int i = L.length; i > location; i--) {//在位置(location)后的数据全部往后移一位
+		L.elem[i - 1] = L.elem[i - 2];
+	}
+	L.elem[location - 1] = num;//插入数据
+}
 
 int main() {
-	int num;//定义添加多少个数据
+	int num;//数字
+	int location;//位置
 	SqList L1;//定义线性表
 	InitList(L1);//初始化
 	cout << "请输入你要添加多少个数据进去，不得超过100" << endl;
 	cin >> num;//你要添加多少个数据进去
 	add(L1, num);//添加数据
+	ListOutput(L1);//输出数据
+
+	cout << "现在执行插入数据处理，输入你要插入的位置和数据，空格隔开" << endl;
+	cin >> location >> num;
+	InsertData(L1, location, num);
 	ListOutput(L1);//输出数据
 	return 0;
 }
