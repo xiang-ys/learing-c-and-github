@@ -13,15 +13,16 @@ typedef struct ListNode {//初始化链表
 //2、再说LinkList，是一个指向该结构体的的指针的别名。
 
 int InitList(LinkList& head);//初始化链表
-int input(LinkList& L,ElemType num);//添加数据
+int input(LinkList& L, int j);//添加数据
 int GetData(LinkList& L);//获取元素
 
 int main() {
+	int num;
 	LinkList L1;
 	InitList(L1);
-	input(L1, 1);
-	input(L1, 2);
-	input(L1, 3);
+	cout << "输入你想在链表添加多少数据" << endl;
+	cin >> num;
+	input(L1, num);
 	GetData(L1);
 	return 0;
 }
@@ -33,57 +34,27 @@ int InitList(LinkList& head) {//初始化链表
 	return ok;
 }
 
-int input(LinkList& L, ElemType num) {//添加数据
-	LinkList p,L1;
-	p = (LinkList)malloc(sizeof(LNode));//1，创建新节点
+int input(LinkList& L, int j) {//添加数据
+	LinkList p,L1;//1，创建新节点
 	p = L;//2, 将p指针与head关联起来，这样p的next指向哪里 head的next也指向哪里
-	L1 = (LinkList)malloc(sizeof(LNode));//3，p的next指向新节点（L1），head的next也指向了L1
-	L1->data = num;//存入数据
-	p->next = L1;
-	p = L1;//4，p断开与head的链接，与L1关联起来，这样p的next指向哪里，L1的next也指向哪里
-	p->next = NULL;//防止next不经意间指向其他地方
+	for (int i = 0; i < j;i++) {
+		L1 = (LinkList)malloc(sizeof(LNode));//3，p的next指向新节点（L1），head的next也指向了L1
+		cout << "输入" << j << "个数字" << endl;
+		cin>>L1->data;//存入数据
+		p->next = L1;//将p和L1连接起来
+		p = L1;//4，p断开与head的链接，与L1关联起来，这样p的next指向哪里，L1的next也指向哪里
+		p->next = NULL;//防止next不经意间指向其他地方
+	}
 	return ok;
 }
 
 int GetData(LinkList& L) {//获得元素
-	int num;
 	LinkList p;
-	p = L->next;
-	while (p->next!=NULL)
+	p = L->next;//指向下一个地址的元素
+	while (p!=NULL)
 	{
-		p = p->next;
-		num = p->data;
-		cout << num<<'\t';
+		cout << p->data <<'\t';//获取并且输出数据
+		p = p->next;//指向下一个
 	}
-	return ok;
-}
-
-void CreateListTail(LinkList& L, int m[], int n) {//尾插法
-	LinkList p, r;
-	int i;
-	L = (LinkList)malloc(sizeof(LNode));
-	r = L;
-	for (i = 0; i < n; i++) {
-		p = (LinkList)malloc(sizeof(LNode));
-		p->data = m[i];
-		r->next = p;
-		r = p;
-	}
-	r->next = NULL;
-}
-
-int GetElem(LinkList L, int i, ElemType* e) {//获取元素
-	int j;
-	LinkList p;
-	p = L->next;
-	j = 1;
-	while (p && j < i) {
-		p = p->next;
-		++j;
-	}
-	if (!p || j > i) {
-		return no;
-	}
-	*e = p->data;
 	return ok;
 }
