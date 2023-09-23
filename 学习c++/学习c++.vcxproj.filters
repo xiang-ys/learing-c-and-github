@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="学习c++.cpp">
+    <ClCompile Include="线性表.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="线性表模版.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="链表.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
