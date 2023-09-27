@@ -21,10 +21,10 @@
     <ClCompile Include="线性表模版.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="链表.cpp">
+    <ClCompile Include="双向链表.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="双向链表.cpp">
+    <ClCompile Include="链表.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
