@@ -1,143 +1,1 @@
-#include<iostream>
-#include<stdlib.h>
-#define ElemType int
-#define ok 1
-#define no 0
-using namespace std;
-
-typedef struct ListNode {//åˆå§‹åŒ–é“¾è¡¨
-	ElemType data;
-	ListNode* next;
-}LNode, * LinkList;
-//1ã€å…ˆè¯´LNodeï¼Œå‚ç…§typedeçš„ç”¨æ³•ï¼Œå¯ä»¥å¾—çŸ¥LNodeå°±æ˜¯struct ListNodeçš„åˆ«åï¼Œå³ListNode == struct LNodeï¼›
-//2ã€å†è¯´LinkListï¼Œæ˜¯ä¸€ä¸ªæŒ‡å‘è¯¥ç»“æ„ä½“çš„çš„æŒ‡é’ˆçš„åˆ«åã€‚
-
-int InitList(LinkList& head);//åˆå§‹åŒ–é“¾è¡¨
-int input(LinkList& L, int j);//æ·»åŠ æ•°æ®
-int GetData(LinkList& L);//è·å¾—å…ƒç´ åŒæ—¶è®¡ç®—æœ‰å¤šå°‘å…ƒç´ 
-int InsertData(LinkList& L, int location, int num);//åœ¨locationä½ç½®æ’å…¥æ•°æ®
-int DeleteData(LinkList& L, int location);//åœ¨locationä½ç½®åˆ é™¤æ•°æ®
-int GetData(LinkList& L, int location);//è·å¾—ç‰¹å®šä½ç½®çš„æ•°æ®
-
-int main() {
-	int num, location;//å®šä¹‰æ•°æ®å’Œä½ç½®
-	LinkList L1, L2, L3;
-	InitList(L1); //åˆå§‹åŒ–é“¾è¡¨(åˆ›å»ºç©ºé“¾è¡¨)
-	cout << "è¾“å…¥ä½ æƒ³åœ¨é“¾è¡¨æ·»åŠ å¤šå°‘æ•°æ®" << endl;
-	cin >> num;
-	input(L1, num);//æ·»åŠ å…ƒç´ 
-	num = GetData(L1);//è·å¾—å…ƒç´ 
-	cout << "ç°åœ¨é“¾è¡¨æœ‰" << num << "ä¸ªå…ƒç´ " << endl;
-	cout << endl;//åˆ†å‰²
-
-	cout << "ç°åœ¨æ‰§è¡Œæ’å…¥æ“ä½œï¼Œè¯·è¾“å…¥ä½ è¦æ’å…¥çš„ä½ç½®å’Œæ•°æ®" << endl;
-	cin >> location >> num;
-	InsertData(L1, location, num);
-	num = GetData(L1);//è·å¾—å…ƒç´ 
-	cout << "ç°åœ¨é“¾è¡¨æœ‰" << num << "ä¸ªå…ƒç´ " << endl;
-	cout << endl;
-
-	cout << "ç°åœ¨æ‰§è¡Œåˆ é™¤æ“ä½œï¼Œè¯·è¾“å…¥ä½ è¦åˆ é™¤çš„ä½ç½®" << endl;
-	cin >> location;
-	DeleteData(L1, location);
-	num = GetData(L1);//è·å¾—å…ƒç´ 
-	cout << "ç°åœ¨é“¾è¡¨æœ‰" << num << "ä¸ªå…ƒç´ " << endl;
-	cout << endl;
-
-	cout << "ç°åœ¨æ‰§è¡Œè·å¾—ç‰¹å®šä½ç½®æ•°æ®ï¼Œè¯·è¾“å…¥ä½ è¦è·å–çš„ä½ç½®" << endl;
-	cin >> location;
-	GetData(L1, location);
-	cout << "æŒ‰ä¸‹ç»§ç»­ä¸‹ä¸€æ­¥æ“ä½œ" << endl;
-	cout << endl;//åˆ†å‰²
-	system("pause");
-	system("cls");
-	InitList(L2); //åˆå§‹åŒ–é“¾è¡¨(åˆ›å»ºç©ºé“¾è¡¨)
-	InitList(L3); //åˆå§‹åŒ–é“¾è¡¨(åˆ›å»ºç©ºé“¾è¡¨)
-	cout << "ç°åœ¨åˆ›å»ºL2é“¾è¡¨ï¼Œè¾“å…¥ä½ æƒ³åœ¨é“¾è¡¨æ·»åŠ å¤šå°‘æ•°æ®" << endl;
-	cin >> num;
-	headinput(L2, num);//æ·»åŠ å…ƒç´ 
-	num = GetData(L2);//è·å¾—å…ƒç´ 
-	cout << "ç°åœ¨é“¾è¡¨L2æœ‰" << num << "ä¸ªå…ƒç´ " << endl;
-	cout << endl;//åˆ†å‰²
-	num = GetData(L1);//è·å¾—å…ƒç´ 
-	cout << "ç°åœ¨é“¾è¡¨L1æœ‰" << num << "ä¸ªå…ƒç´ " << endl;
-	cout << endl;//åˆ†å‰²
-	cout << "ç°åœ¨æ‰§è¡Œå°†L1å’ŒL2æ‹¼æ¥çš„æ“ä½œ" << endl;
-	MegeList(L1, L2, L3);//å°†L1å’ŒL2æ•´åˆåˆ°L3
-	num = GetData(L3);//è·å¾—å…ƒç´ 
-	cout << "ç°åœ¨é“¾è¡¨L3æœ‰" << num << "ä¸ªå…ƒç´ " << endl;
-	cout << endl;//åˆ†å‰²
-
-	return 0;
-}
-
-int InitList(LinkList& head) {//åˆå§‹åŒ–é“¾è¡¨
-	head = (LinkList)malloc(sizeof(LNode));
-	if (!head)exit(0);
-	head->next = NULL;
-	return ok;
-}
-
-int input(LinkList& L, int j) {//æ·»åŠ æ•°æ®
-	LinkList p, L1;//1ï¼Œåˆ›å»ºæ–°èŠ‚ç‚¹
-	p = L;//2, å°†pæŒ‡é’ˆä¸headå…³è”èµ·æ¥ï¼Œè¿™æ ·pçš„nextæŒ‡å‘å“ªé‡Œ headçš„nextä¹ŸæŒ‡å‘å“ªé‡Œ
-	for (int i = 0; i < j; i++) {
-		L1 = (LinkList)malloc(sizeof(LNode));//3ï¼Œpçš„nextæŒ‡å‘æ–°èŠ‚ç‚¹ï¼ˆL1ï¼‰ï¼Œheadçš„nextä¹ŸæŒ‡å‘äº†L1
-		cout << "è¾“å…¥" << j << "ä¸ªæ•°å­—" << endl;
-		cin >> L1->data;//å­˜å…¥æ•°æ®
-		p->next = L1;//å°†på’ŒL1è¿æ¥èµ·æ¥
-		p = L1;//4ï¼Œpæ–­å¼€ä¸headçš„é“¾æ¥ï¼Œä¸L1å…³è”èµ·æ¥ï¼Œè¿™æ ·pçš„nextæŒ‡å‘å“ªé‡Œï¼ŒL1çš„nextä¹ŸæŒ‡å‘å“ªé‡Œ
-		p->next = NULL;//é˜²æ­¢nextä¸ç»æ„é—´æŒ‡å‘å…¶ä»–åœ°æ–¹
-	}
-	system("cls");//æ¸…å±
-	return ok;
-}
-
-int GetData(LinkList& L) {//è·å¾—å…ƒç´ åŒæ—¶è®¡ç®—æœ‰å¤šå°‘å…ƒç´ 
-	int i = 0;
-	LinkList p;
-	p = L->next;//æå‰æŒ‡å‘ä¸‹ä¸€ä¸ªåœ°å€çš„å…ƒç´ ï¼Œä¸ç„¶æŒ‡å‘çš„æ˜¯ç©ºèŠ‚ç‚¹ã€‚
-	cout << "é“¾è¡¨æ•°æ®ï¼š";
-	while (p != NULL)
-	{
-		cout << p->data << '\t';//è·å–å¹¶ä¸”è¾“å‡ºæ•°æ®
-		p = p->next;//æŒ‡å‘ä¸‹ä¸€ä¸ª
-		i++;//è®¡ç®—æœ‰å¤šå°‘å…ƒç´ 
-	}
-	return i;
-}
-
-int InsertData(LinkList& L, int location, int num) {//åœ¨locationä½ç½®æ’å…¥æ•°æ®
-	LinkList p, L1;
-	p = L;//å°†pæŒ‡é’ˆä¸headå…³è”èµ·æ¥
-	L1 = (LinkList)malloc(sizeof(LNode));//ç»™æ–°èŠ‚ç‚¹æ–°ç©ºé—´
-	for (int i = 1; i < location; i++) {//pä¸€ç›´åˆ°æ‰€è¦æ–°å»ºèŠ‚ç‚¹çš„ä½ç½®æ‰åœæ­¢
-		p = p->next;
-	}
-	L1->data = num;//å°†æ•°æ®å‚¨å­˜åˆ°æ–°èŠ‚ç‚¹
-	L1->next = p->next;//ç¬¬ä¸€æ­¥ï¼šå°†pæŒ‡å‘ä¸‹ä¸€ä¸ªæ•°æ®çš„æŒ‡é’ˆç»™L1ï¼Œè®©L1æŒ‡å‘ä¸‹ä¸€ä¸ªæ•°æ®ï¼Œè¿æ¥å°¾éƒ¨
-	p->next = L1;//ç¬¬äºŒæ­¥ï¼špæŒ‡å‘çš„ä¸‹ä¸€ä¸ªæ•°æ®ä¸ºL1ï¼Œè¿æ¥å¤´éƒ¨
-	return ok;//è‡³æ­¤ï¼Œå®Œæˆæ’å…¥
-}
-
-int DeleteData(LinkList& L, int location) {//åœ¨locationä½ç½®åˆ é™¤æ•°æ®
-	LinkList p, L1;
-	p = L;//å°†pæŒ‡é’ˆä¸headå…³è”èµ·æ¥
-	L1 = p;
-	for (int i = 0; i < location; i++) {//pä¸€ç›´åˆ°æ‰€è¦åˆ é™¤çš„èŠ‚ç‚¹ä½ç½®æ‰åœæ­¢
-		L1 = p;
-		p = p->next;
-	}
-	L1->next = p->next;//L1åœ¨pçš„ä¸Šä¸€ä¸ªä½ç½®ï¼Œè¿™æ ·å¯ä»¥ç›´æ¥è®©L1ç›´æ¥è¿æ¥påé¢ä¸€ä¸ªï¼Œè®©pæ— å¤„å¯å»
-	free(p);//è¿™ä¸€æ­¥å¯ä»¥ä¸å†™ï¼Œä½†æ˜¯ä¸ºäº†è®©pâ€œæ­»â€å¾—æ˜ç™½ç‚¹ï¼Œå°±å†™ä¸Šäº†
-	return ok;
-}
-int GetData(LinkList& L, int location) {//è·å¾—ç‰¹å®šä½ç½®çš„æ•°æ®
-	LinkList p;
-	p = L;
-	for (int i = 0; i < location; i++) {//pä¸€ç›´åˆ°æ‰€è¦åˆ é™¤çš„èŠ‚ç‚¹ä½ç½®æ‰åœæ­¢
-		p = p->next;
-	}
-	cout << "åœ¨ç¬¬" << location << "ä½çš„æ•°æ®ä¸º" << p->data << endl;
-	return ok;
-}
+#include<iostream>#include<stdlib.h>#define ElemType int#define ok 1#define no 0using namespace std;typedef struct ListNode {//³õÊ¼»¯Á´±í	ElemType data;	ListNode* next;}LNode, * LinkList;//1¡¢ÏÈËµLNode£¬²ÎÕÕtypedeµÄÓÃ·¨£¬¿ÉÒÔµÃÖªLNode¾ÍÊÇstruct ListNodeµÄ±ğÃû£¬¼´ListNode == struct LNode£»//2¡¢ÔÙËµLinkList£¬ÊÇÒ»¸öÖ¸Ïò¸Ã½á¹¹ÌåµÄµÄÖ¸ÕëµÄ±ğÃû¡£int InitList(LinkList& head);//³õÊ¼»¯Á´±íint input(LinkList& L, int j);//Ìí¼ÓÊı¾İ(Î²²å·¨)int headinput(LinkList& L, int j);//Ìí¼ÓÊı¾İ(Í·²å·¨)int GetData(LinkList& L);//»ñµÃÔªËØÍ¬Ê±¼ÆËãÓĞ¶àÉÙÔªËØint InsertData(LinkList& L, int location, int num);//ÔÚlocationÎ»ÖÃ²åÈëÊı¾İint DeleteData(LinkList& L, int location);//ÔÚlocationÎ»ÖÃÉ¾³ıÊı¾İint GetData(LinkList& L, int location);//»ñµÃÌØ¶¨Î»ÖÃµÄÊı¾İint MegeList(LinkList& L1, LinkList& L2, LinkList& L3); //Á½¸öÁ´±íÕûºÏµ½L3 int main() {	int num, location;//¶¨ÒåÊı¾İºÍÎ»ÖÃ	LinkList L1, L2, L3;	InitList(L1); //³õÊ¼»¯Á´±í(´´½¨¿ÕÁ´±í)	cout << "ÊäÈëÄãÏëÔÚÁ´±íÌí¼Ó¶àÉÙÊı¾İ" << endl;	cin >> num;	input(L1, num);//Ìí¼ÓÔªËØ	num = GetData(L1);//»ñµÃÔªËØ	cout << "ÏÖÔÚÁ´±íÓĞ" << num << "¸öÔªËØ" << endl;	cout << endl;//·Ö¸î	cout << "ÏÖÔÚÖ´ĞĞ²åÈë²Ù×÷£¬ÇëÊäÈëÄãÒª²åÈëµÄÎ»ÖÃºÍÊı¾İ" << endl;	cin >> location >> num;	InsertData(L1, location, num);	num = GetData(L1);//»ñµÃÔªËØ	cout << "ÏÖÔÚÁ´±íÓĞ" << num << "¸öÔªËØ" << endl;	cout << endl;	cout << "ÏÖÔÚÖ´ĞĞÉ¾³ı²Ù×÷£¬ÇëÊäÈëÄãÒªÉ¾³ıµÄÎ»ÖÃ" << endl;	cin >> location;	DeleteData(L1, location);	num = GetData(L1);//»ñµÃÔªËØ	cout << "ÏÖÔÚÁ´±íÓĞ" << num << "¸öÔªËØ" << endl;	cout << endl;	cout << "ÏÖÔÚÖ´ĞĞ»ñµÃÌØ¶¨Î»ÖÃÊı¾İ£¬ÇëÊäÈëÄãÒª»ñÈ¡µÄÎ»ÖÃ" << endl;	cin >> location;	GetData(L1, location);	cout << "°´ÏÂ¼ÌĞøÏÂÒ»²½²Ù×÷" << endl;	cout << endl;//·Ö¸î	system("pause");	system("cls");	InitList(L2); //³õÊ¼»¯Á´±í(´´½¨¿ÕÁ´±í)	InitList(L3); //³õÊ¼»¯Á´±í(´´½¨¿ÕÁ´±í)	cout << "ÏÖÔÚ´´½¨L2Á´±í£¬ÊäÈëÄãÏëÔÚÁ´±íÌí¼Ó¶àÉÙÊı¾İ" << endl;	cin >> num;	headinput(L2, num);//Ìí¼ÓÔªËØ	num = GetData(L2);//»ñµÃÔªËØ	cout << "ÏÖÔÚÁ´±íL2ÓĞ" << num << "¸öÔªËØ" << endl;	cout << endl;//·Ö¸î	num = GetData(L1);//»ñµÃÔªËØ	cout << "ÏÖÔÚÁ´±íL1ÓĞ" << num << "¸öÔªËØ" << endl;	cout << endl;//·Ö¸î	cout << "ÏÖÔÚÖ´ĞĞ½«L1ºÍL2Æ´½ÓµÄ²Ù×÷" << endl;	MegeList(L1, L2, L3);//½«L1ºÍL2ÕûºÏµ½L3	num = GetData(L3);//»ñµÃÔªËØ	cout << "ÏÖÔÚÁ´±íL3ÓĞ" << num << "¸öÔªËØ" << endl;	cout << endl;//·Ö¸î	return 0;}int InitList(LinkList& head) {//³õÊ¼»¯Á´±í	head = (LinkList)malloc(sizeof(LNode));	if (!head)exit(0);	head->next = NULL;	return ok;}int input(LinkList& L, int j) {//Ìí¼ÓÊı¾İ	LinkList p, L1;//1£¬´´½¨ĞÂ½Úµã	p = L;//2, ½«pÖ¸ÕëÓëhead¹ØÁªÆğÀ´£¬ÕâÑùpµÄnextÖ¸ÏòÄÄÀï headµÄnextÒ²Ö¸ÏòÄÄÀï	for (int i = 0; i < j; i++) {		L1 = (LinkList)malloc(sizeof(LNode));//3£¬pµÄnextÖ¸ÏòĞÂ½Úµã£¨L1£©£¬headµÄnextÒ²Ö¸ÏòÁËL1		cout << "ÊäÈë" << j << "¸öÊı×Ö" << endl;		cin >> L1->data;//´æÈëÊı¾İ		p->next = L1;//½«pºÍL1Á¬½ÓÆğÀ´		p = L1;//4£¬p¶Ï¿ªÓëheadµÄÁ´½Ó£¬ÓëL1¹ØÁªÆğÀ´£¬ÕâÑùpµÄnextÖ¸ÏòÄÄÀï£¬L1µÄnextÒ²Ö¸ÏòÄÄÀï		p->next = NULL;//·ÀÖ¹next²»¾­Òâ¼äÖ¸ÏòÆäËûµØ·½	}	system("cls");//ÇåÆÁ	return ok;}int GetData(LinkList& L) {//»ñµÃÔªËØÍ¬Ê±¼ÆËãÓĞ¶àÉÙÔªËØ	int i = 0;	LinkList p;	p = L->next;//ÌáÇ°Ö¸ÏòÏÂÒ»¸öµØÖ·µÄÔªËØ£¬²»È»Ö¸ÏòµÄÊÇ¿Õ½Úµã¡£	cout << "Á´±íÊı¾İ£º";	while (p != NULL)	{		cout << p->data << '\t';//»ñÈ¡²¢ÇÒÊä³öÊı¾İ		p = p->next;//Ö¸ÏòÏÂÒ»¸ö		i++;//¼ÆËãÓĞ¶àÉÙÔªËØ	}	return i;}int InsertData(LinkList& L, int location, int num) {//ÔÚlocationÎ»ÖÃ²åÈëÊı¾İ	LinkList p, L1;	p = L;//½«pÖ¸ÕëÓëhead¹ØÁªÆğÀ´	L1 = (LinkList)malloc(sizeof(LNode));//¸øĞÂ½ÚµãĞÂ¿Õ¼ä	for (int i = 1; i < location; i++) {//pÒ»Ö±µ½ËùÒªĞÂ½¨½ÚµãµÄÎ»ÖÃ²ÅÍ£Ö¹		p = p->next;	}	L1->data = num;//½«Êı¾İ´¢´æµ½ĞÂ½Úµã	L1->next = p->next;//µÚÒ»²½£º½«pÖ¸ÏòÏÂÒ»¸öÊı¾İµÄÖ¸Õë¸øL1£¬ÈÃL1Ö¸ÏòÏÂÒ»¸öÊı¾İ£¬Á¬½ÓÎ²²¿	p->next = L1;//µÚ¶ş²½£ºpÖ¸ÏòµÄÏÂÒ»¸öÊı¾İÎªL1£¬Á¬½ÓÍ·²¿	return ok;//ÖÁ´Ë£¬Íê³É²åÈë}int DeleteData(LinkList& L, int location) {//ÔÚlocationÎ»ÖÃÉ¾³ıÊı¾İ	LinkList p, L1;	p = L;//½«pÖ¸ÕëÓëhead¹ØÁªÆğÀ´	L1 = p;	for (int i = 0; i < location; i++) {//pÒ»Ö±µ½ËùÒªÉ¾³ıµÄ½ÚµãÎ»ÖÃ²ÅÍ£Ö¹		L1 = p;		p = p->next;	}	L1->next = p->next;//L1ÔÚpµÄÉÏÒ»¸öÎ»ÖÃ£¬ÕâÑù¿ÉÒÔÖ±½ÓÈÃL1Ö±½ÓÁ¬½ÓpºóÃæÒ»¸ö£¬ÈÃpÎŞ´¦¿ÉÈ¥	free(p);//ÕâÒ»²½¿ÉÒÔ²»Ğ´£¬µ«ÊÇÎªÁËÈÃp¡°ËÀ¡±µÃÃ÷°×µã£¬¾ÍĞ´ÉÏÁË	return ok;}int GetData(LinkList& L, int location) {//»ñµÃÌØ¶¨Î»ÖÃµÄÊı¾İ	LinkList p;	p = L;	for (int i = 0; i < location; i++) {//pÒ»Ö±µ½ËùÒªÉ¾³ıµÄ½ÚµãÎ»ÖÃ²ÅÍ£Ö¹		p = p->next;	}	cout << "ÔÚµÚ" << location << "Î»µÄÊı¾İÎª" << p->data << endl;	return ok;}int headinput(LinkList& L, int j) {//Í·²å·¨ 	LinkList L1;	for (int i = 0; i < j; i++) {		L1 = (LinkList)malloc(sizeof(LNode));		cout << "ÊäÈë" << j << "¸öÊı×Ö" << endl;		cin >> L1->data;		L1->next = L->next;		L->next = L1;	}	system("cls");//ÇåÆÁ	return ok;}int MegeList(LinkList& L1, LinkList& L2, LinkList& L3) {//½«L1ºÍL2ÕûºÍµ½L3 	LinkList p1, p2, p3;//´´½¨3¸ö¿Õ½Úµã£¬¸¨ÖúÕûºÏ 	p1 = L1->next;//p1Ö¸ÏòL1µÄÏÂÒ»¸ö 	p2 = L2->next;//p2Ö¸ÏòL2µÄÏÂÒ»¸ö 	p3 = L1;//p3ºÍL1¹ØÁª 	L3 = p3;//p3Ö¸ÏòL3µÄÏÂÒ»¸ö 	while (p1 && p2) {		if (p1->data <= p2->data) {//Èç¹ûp1ºÍÊı¾İ±Èp2Ğ¡£¬½«p1µÄÊı¾İÕûºÏµ½p3 			p3->next = p1;//p3µÄÏÂÒ»¸öÎªp1µÄÒ»¸ö½áµã 			p3 = p1;//½«p3Ö¸ÏòÕâ¸ö½Úµã£¬ÎªÁË·½±ãÏÂÒ»´Î²Ù×÷ÔÚp3ºóÃæÌí¼Ó½Úµã 			p1 = p1->next;//ÈÃp1Ö¸ÏòÏÂÒ»¸ö½Úµã£¬ÈÃËü²ÎÓëÏÂÒ»´Î¶Ô±È 		}		else {//Èç¹ûp2ºÍÊı¾İ±Èp1Ğ¡£¬½«p2µÄÊı¾İÕûºÏµ½p3			p3->next = p2;//²Ù×÷ºÍÉÏÃæÊÇÒ»¸öµÀÀí 			p3 = p2;			p2 = p2->next;		}	}	p3->next = p1 ? p1 : p2;	free(L2);	return ok;}
