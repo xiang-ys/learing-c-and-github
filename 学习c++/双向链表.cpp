@@ -32,6 +32,5 @@ int input(DuLinkList& L, int j) {//Ìí¼ÓÊý¾Ý
 	DuLinkList p,L1;
 	p = L;
 	L1 = (DuLinkList)malloc(sizeof(DuLNode));
-	return ok;
-
+	return ok£»
 }
