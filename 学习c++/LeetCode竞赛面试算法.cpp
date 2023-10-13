@@ -25,15 +25,21 @@ int main() {
 	cout << printOddTimeNum1()<<endl;
 	printOddTimeNum2();*/
 	vector<int> vec1,vec2;
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 100; i++) {
 		generateRandomArray(vec1, 10, 20);
 		vec2 = vector<int>(vec1.size(), -1);
-		copy(vec1.begin(), vec1.end(), vec2.begin());//vec2复制vec1
-		process_super(vec1, 0, vec1.size() - 1);
+		cout << "原数组为：";
 		for (int num : vec1) {//遍历vec1
 			cout << num << " ";
 		}
-		/*cout << "最大值为"<<process(vec1, 0, vec1.size()-1);*/
+		cout << "\n";
+		copy(vec1.begin(), vec1.end(), vec2.begin());//vec2复制vec1
+		process_super(vec1, 0, vec1.size()-1);
+		cout << "排序后为：";
+		for (int num : vec1) {//遍历vec1
+			cout << num << " ";
+		}
+		cout << "最大值为"<<process(vec1, 0, vec1.size()-1);
 		cout << "\n";
 	}
 	return 0;
@@ -117,24 +123,30 @@ int process(vector<int>& vec, int L, int R) {
 int process_super(vector<int>& vec, int L, int R) {
 	if (L == R) return vec[L];
 	int mid = L + ((R - L) >> 1);//中点，右移一位等于除于2
-	process(vec, L, mid);
-	process(vec, mid + 1, R);
-	merge(vec, L, mid, R);
+	process_super(vec, L, mid);// 排序左半部分
+	process_super(vec, mid + 1, R);// 排序右半部分
+	merge(vec, L, mid, R);// 合并两个有序数组
 }
 //归并排序主操作
 void merge(vector<int>& vec, int L, int M, int R) {
-	vector<int> vecHelp(vec.size(), -1);
-	auto it = vecHelp.begin();
+	vector<int> vecHelp;
 	int p1 = L;
 	int p2 = M + 1;
 	while (p1 <= M && p2 <= R){
-		*(it++) = vec[p1++] <= vec[p2++] ? vec[p2++] : vec[p1++];
+		if (vec[p1] <= vec[p2]) {
+			vecHelp.push_back(vec[p1++]);
+		} 
+		else {
+			vecHelp.push_back(vec[p2++]);
+		}
 	}
 	while (p1 <= M){
-		*(it++) = vec[p2++];
+		vecHelp.push_back(vec[p1++]);
 	}
 	while (p2 <= R) {
-		*(it++) = vec[p1++];
+		vecHelp.push_back(vec[p2++]);
 	}
-	copy(vecHelp.begin(), vecHelp.end(), vec.begin());
+	for (int i = 0; i < vecHelp.size(); ++i) {
+		vec[L + i] = vecHelp[i];
+	}
 }
