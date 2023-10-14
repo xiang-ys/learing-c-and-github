@@ -1,9 +1,7 @@
 #include<iostream>
-#include<random>
-#include <chrono>  // 用于高分辨率时钟
+#include<random>   //生成时间种子
+#include<chrono>  // 用于高分辨率时钟
 #include<vector>   //数组，但是可以自定义长度
-#include<algorithm>
-#include<time.h>
 #include<stdlib.h>
 using namespace std;
 
@@ -12,8 +10,8 @@ int printOddTimeNum1();//有一个数字在数组出现奇数次，其他都出现偶数次,求奇数
 int printOddTimeNum2();//有两个数字在数组出现奇数次，其他都出现偶数次,求奇数
 int generateRandomArray(vector<int>& vec,int maxSize,int maxValue);//对数器,maxSize最大长度，maxValue最大数据
 int process(vector<int>& vec, int L, int R);//用递归在vec数组上求最大值,用来理解归并排序
-int process_super(vector<int>& vec, int L, int R);
-void merge(vector<int>& vec,int L,int M,int R);
+int process_super(vector<int>& vec, int L, int R);//归并排序
+void merge(vector<int>& vec,int L,int M,int R);//归并排序的合并左右两个数组
 template<typename T>
 void generateRandomVector(std::vector<T>& vec, int maxSize, T minValue, T maxValue);//大佬的对数器
 
@@ -127,12 +125,13 @@ int process_super(vector<int>& vec, int L, int R) {
 	process_super(vec, mid + 1, R);// 排序右半部分
 	merge(vec, L, mid, R);// 合并两个有序数组
 }
-//归并排序主操作
+// 函数功能：将两个有序子数组(vec[L...M] 和 vec[M+1...R])合并为一个有序数组
 void merge(vector<int>& vec, int L, int M, int R) {
-	vector<int> vecHelp;
-	int p1 = L;
-	int p2 = M + 1;
-	while (p1 <= M && p2 <= R){
+	vector<int> vecHelp;// 用于临时存放合并后的有序数组
+	int p1 = L;// p1指针指向左侧有序子数组的起始位置
+	int p2 = M + 1;// p2指针指向右侧有序子数组的起始位置
+	// 当左右两个子数组都还有元素时，比较它们的当前元素，将较小的元素添加到辅助向量中
+	while (p1 <= M && p2 <= R) {
 		if (vec[p1] <= vec[p2]) {
 			vecHelp.push_back(vec[p1++]);
 		} 
@@ -140,12 +139,14 @@ void merge(vector<int>& vec, int L, int M, int R) {
 			vecHelp.push_back(vec[p2++]);
 		}
 	}
+	// 当左或右的一个个子数组都还有元素时，将剩下的元素添加到辅助向量中
 	while (p1 <= M){
 		vecHelp.push_back(vec[p1++]);
 	}
 	while (p2 <= R) {
 		vecHelp.push_back(vec[p2++]);
 	}
+	// 将辅助向量中的元素复制回原数组，完成合并操作
 	for (int i = 0; i < vecHelp.size(); ++i) {
 		vec[L + i] = vecHelp[i];
 	}
