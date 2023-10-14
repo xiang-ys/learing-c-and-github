@@ -5,16 +5,24 @@
 #include<stdlib.h>
 using namespace std;
 
+// 递归行为的时间复杂度估算(master公式)
+// T(N) = a*T(N/b) + O(N^d)  a为自己调用自己的次数，b为子函数的规模，也就是n在子函数被拆成几半（b的子规模必须一样才能调用此公式）
+// 1)log(b, a) > d -> 复杂度为O(N^log(b, a))以b为底
+// 2)log(b, a) = d -> 复杂度为O(N^d * logN)
+// 3)log(b, a) < d -> 复杂度为O(N^d)
+
 void swap(int& a, int &b);//使用异或交换a，b位置(抖机灵算法) “如果传入相同的数据会归为0！！”
-int printOddTimeNum1();//有一个数字在数组出现奇数次，其他都出现偶数次,求奇数
-int printOddTimeNum2();//有两个数字在数组出现奇数次，其他都出现偶数次,求奇数
+int printOddTimeNum1();//问题:有一个数字在数组出现奇数次，其他都出现偶数次,求奇数
+int printOddTimeNum2();//问题:有两个数字在数组出现奇数次，其他都出现偶数次,求奇数
 int generateRandomArray(vector<int>& vec,int maxSize,int maxValue);//对数器,maxSize最大长度，maxValue最大数据
 int process(vector<int>& vec, int L, int R);//用递归在vec数组上求最大值,用来理解归并排序
-int MergeSort(vector<int>& vec, int L, int R);//归并排序T(n*logn)
+int MergeSort(vector<int>& vec, int L, int R);//归并排序T(n*logn) 没有浪费比较资源
 void merge(vector<int>& vec,int L,int M,int R);//归并排序的合并左右两个数组
 void Bubble_Sort(vector<int>& vec);//冒泡排序(n^2)
 void Selection_Sort(vector<int>& vec);//选择排序O(n^2)
 int insertionSort(vector<int>& vec);//插入排序O(n^2)(比冒泡选择好一点，不一定固定的O(n^2))
+int smallSum(vector<int>& vec,int L,int R);//问题:有一个数组，其中左边每一个小于这个数的数累加起来叫做小和，求数组的所有小和加起来的数值
+int smallSum_merge(vector<int>& vec, int L, int M, int R); //用归并排序算法解决smallSum问题
 template<typename T>
 void generateRandomVector(std::vector<T>& vec, int maxSize, T minValue, T maxValue);//大佬的对数器
 
@@ -37,15 +45,16 @@ int main() {
 		cout << "\n";
 		copy(vec1.begin(), vec1.end(), vec2.begin());//vec2复制vec1
 		copy(vec1.begin(), vec1.end(), vec3.begin());//vec3复制vec1
-		MergeSort(vec1, 0, vec1.size()-1);//归并
-		Bubble_Sort(vec2);//冒泡
-		Selection_Sort(vec2);//选择
-		insertionSort(vec3);//插入
-		cout << "排序后为：";
-		for (int num : vec3) {//遍历
-			cout << num << " ";
-		}
-		cout << "最大值为"<<process(vec1, 0, vec1.size()-1);
+		//MergeSort(vec1, 0, vec1.size()-1);//归并
+		//Bubble_Sort(vec2);//冒泡
+		//Selection_Sort(vec2);//选择
+		//insertionSort(vec3);//插入
+		//cout << "排序后为：";
+		//for (int num : vec1) {//遍历
+		//	cout << num << " ";
+		//}
+		/*cout << "最大值为"<<process(vec1, 0, vec1.size()-1);*/
+		cout<<"小和为："<< smallSum(vec1, 0, vec1.size() - 1);
 		cout << "\n";
 	}
 	return 0;
@@ -154,9 +163,11 @@ void merge(vector<int>& vec, int L, int M, int R) {
 		vecHelp.push_back(vec[p2++]);
 	}
 	// 将辅助向量中的元素复制回原数组，完成合并操作
-	for (size_t i = 0; i < vecHelp.size(); ++i) {
+	for (size_t i = 0; i < vecHelp.size(); ++i) {//size_t = unsigned int 即无符号int
 		vec[L + i] = vecHelp[i];
 	}
+	vecHelp.clear();
+	vector<int>().swap(vecHelp);
 }
 
 void Bubble_Sort(vector<int>& vec) {//冒泡排序
@@ -181,7 +192,7 @@ void Selection_Sort(vector<int>& vec) {//选择排序
 		if (vec[i] != vec[min]) swap(vec[i], vec[min]);
 	}
 }
-//4 5 3 6 9 2 
+
 int insertionSort(vector<int>& vec) {//插入排序(比上面好一点，不一定固定的O(N^2))
 	if (vec.size() == 0)return 0;
 	for (size_t i = 1; i < vec.size(); i++) {
@@ -190,4 +201,40 @@ int insertionSort(vector<int>& vec) {//插入排序(比上面好一点，不一定固定的O(N^2)
 		}
 	}
 	return 1;
+}
+
+int smallSum(vector<int>& vec, int L, int R) {
+	if(L == R) return 0;
+	int mid = L + ((R - L) >> 1);
+	return smallSum(vec, L, mid) + smallSum(vec, mid + 1, R) + smallSum_merge(vec, L, mid, R);
+}
+
+int smallSum_merge(vector<int>& vec, int L, int M, int R) {
+	vector<int> vecHelp;// 用于临时存放合并后的有序数组
+	int p1 = L;// p1指针指向左侧有序子数组的起始位置
+	int p2 = M + 1;// p2指针指向右侧有序子数组的起始位置
+	int res = 0;
+	while (p1 <= M && p2 <= R) {
+		res += vec[p1] < vec[p2] ? (R - p2 + 1) * vec[p1] : 0;
+		if (vec[p1] <= vec[p2]) {
+			vecHelp.push_back(vec[p1++]);
+		}
+		else {
+			vecHelp.push_back(vec[p2++]);
+		}
+	}
+	// 当左或右的一个个子数组都还有元素时，将剩下的元素添加到辅助向量中
+	while (p1 <= M) {
+		vecHelp.push_back(vec[p1++]);
+	}
+	while (p2 <= R) {
+		vecHelp.push_back(vec[p2++]);
+	}
+	// 将辅助向量中的元素复制回原数组，完成合并操作
+	for (size_t i = 0; i < vecHelp.size(); ++i) {//size_t = unsigned int 即无符号int
+		vec[L + i] = vecHelp[i];
+	}
+	vecHelp.clear();
+	vector<int>().swap(vecHelp);
+	return res;
 }
