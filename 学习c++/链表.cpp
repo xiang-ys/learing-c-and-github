@@ -69,7 +69,6 @@ int main() {
 	num = GetData(L3);//获得元素
 	cout << "现在链表L3有" << num << "个元素" << endl;
 	cout << endl;//分割
-
 	return 0;
 }
 

@@ -16,6 +16,8 @@ int input(DuLinkList& L, int size);//添加数据
 int ListTraver(DuLinkList& L);//遍历双链表同时计算长度 
 int ListInsert(DuLinkList& L, int num, int data);//插入操作 
 int ListDelete(DuLinkList& L, int size);//删除操作 
+int GetData(DuLinkList& L, int num);//获得特定位置数据
+int clearDuLinkList(DuLinkList& L);//清空双链表(保留头结点)
 
 int main() {
 	ElemType num, size;
@@ -35,6 +37,16 @@ int main() {
 	cin >> size;
 	ListDelete(L1, size);
 	cout << "长度为" << ListTraver(L1) << endl;//遍历操作，同时输出长度 
+
+	cout << "现在进行查找特定位置数据操作，请输入你要查找的位置" << endl;
+	cin >> num;
+	GetData(L1, num);
+	cout << "长度为" << ListTraver(L1) << endl;//遍历操作，同时输出长度 
+
+	system("pause");
+	cout << "现在进行清空所有数据操作" << endl;
+	clearDuLinkList(L1);
+	cout << "长度为" << ListTraver(L1) << endl;//遍历操作，同时输出长度
 	return 0;
 }
 
@@ -67,6 +79,7 @@ int ListTraver(DuLinkList& L) {//遍历双链表同时计算长度
 	int size = 0;//计算 
 	DuLinkList p;
 	p = L;
+	if ((p->next) == p)cout << "保留了头结点，后续无节点";
 	while ((p->next) != p) {//直到p的下一个指向自己的时候结束 
 		p = p->next;
 		cout << p->data << " ";
@@ -104,3 +117,25 @@ int ListDelete(DuLinkList& L, int size) {//删除操作
 	return ok;
 }
 
+int GetData(DuLinkList& L, int num) {//获得特定位置的数据
+	DuLinkList p;
+	p = L;
+	for (int i = 0; i < num; i++) {//p一直到所要删除的节点位置才停止
+		p = p->next;
+	}
+	cout << "在第" << num << "位的数据为" << p->data << endl;
+	return ok;
+}
+
+int clearDuLinkList(DuLinkList& L) {
+	DuLinkList p,Q;
+	p = L->next;//如果要保留头结点L改成L->next;
+	while ((p->next) != p) {//类似与过河拆桥，走一步拆后面的节点 
+		Q = p;
+		p = p->next;
+		free(Q);
+	}
+	free(p);//清除最后一个节点
+	L->next = L;
+	return ok;
+}

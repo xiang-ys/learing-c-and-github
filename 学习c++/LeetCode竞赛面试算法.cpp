@@ -5,13 +5,16 @@
 #include<stdlib.h>
 using namespace std;
 
-void swap(int a, int b);//使用异或交换a，b位置(抖机灵算法)
+void swap(int& a, int &b);//使用异或交换a，b位置(抖机灵算法) “如果传入相同的数据会归为0！！”
 int printOddTimeNum1();//有一个数字在数组出现奇数次，其他都出现偶数次,求奇数
 int printOddTimeNum2();//有两个数字在数组出现奇数次，其他都出现偶数次,求奇数
 int generateRandomArray(vector<int>& vec,int maxSize,int maxValue);//对数器,maxSize最大长度，maxValue最大数据
 int process(vector<int>& vec, int L, int R);//用递归在vec数组上求最大值,用来理解归并排序
-int process_super(vector<int>& vec, int L, int R);//归并排序
+int MergeSort(vector<int>& vec, int L, int R);//归并排序T(n*logn)
 void merge(vector<int>& vec,int L,int M,int R);//归并排序的合并左右两个数组
+void Bubble_Sort(vector<int>& vec);//冒泡排序(n^2)
+void Selection_Sort(vector<int>& vec);//选择排序O(n^2)
+int insertionSort(vector<int>& vec);//插入排序O(n^2)(比冒泡选择好一点，不一定固定的O(n^2))
 template<typename T>
 void generateRandomVector(std::vector<T>& vec, int maxSize, T minValue, T maxValue);//大佬的对数器
 
@@ -22,19 +25,24 @@ int main() {
 	swap(a, b);
 	cout << printOddTimeNum1()<<endl;
 	printOddTimeNum2();*/
-	vector<int> vec1,vec2;
-	for (int i = 0; i < 100; i++) {
+	vector<int> vec1,vec2,vec3;
+	for (int i = 0; i < 5; i++) {
 		generateRandomArray(vec1, 10, 20);
 		vec2 = vector<int>(vec1.size(), -1);
+		vec3 = vector<int>(vec1.size(), -1);
 		cout << "原数组为：";
 		for (int num : vec1) {//遍历vec1
 			cout << num << " ";
 		}
 		cout << "\n";
 		copy(vec1.begin(), vec1.end(), vec2.begin());//vec2复制vec1
-		process_super(vec1, 0, vec1.size()-1);
+		copy(vec1.begin(), vec1.end(), vec3.begin());//vec3复制vec1
+		MergeSort(vec1, 0, vec1.size()-1);//归并
+		Bubble_Sort(vec2);//冒泡
+		Selection_Sort(vec2);//选择
+		insertionSort(vec3);//插入
 		cout << "排序后为：";
-		for (int num : vec1) {//遍历vec1
+		for (int num : vec3) {//遍历
 			cout << num << " ";
 		}
 		cout << "最大值为"<<process(vec1, 0, vec1.size()-1);
@@ -43,13 +51,12 @@ int main() {
 	return 0;
 }
 
-void swap(int a, int b) {//使用异或交换a，b位置
+void swap(int& a, int& b) {//使用异或交换a，b位置  “如果传入相同的数据会归为0！！”
 	/*异或语句基本规则
     a^a=0;0^a=a;*/
 	a = a ^ b;
 	b = a ^ b;
 	a = a ^ b;
-	cout << a << " " << b << endl;
 }
 
 //有一个数字出现奇数次，其他都出现偶数次
@@ -117,12 +124,12 @@ int process(vector<int>& vec, int L, int R) {
 	int rightMax = process(vec, mid + 1, R);
 	return leftMax < rightMax ? rightMax : leftMax;
 }
-//vec[L..R]范围排序
-int process_super(vector<int>& vec, int L, int R) {
+//vec[L..R]范围排序,归并排序
+int MergeSort(vector<int>& vec, int L, int R) {
 	if (L == R) return vec[L];
 	int mid = L + ((R - L) >> 1);//中点，右移一位等于除于2
-	process_super(vec, L, mid);// 排序左半部分
-	process_super(vec, mid + 1, R);// 排序右半部分
+	MergeSort(vec, L, mid);// 排序左半部分
+	MergeSort(vec, mid + 1, R);// 排序右半部分
 	merge(vec, L, mid, R);// 合并两个有序数组
 }
 // 函数功能：将两个有序子数组(vec[L...M] 和 vec[M+1...R])合并为一个有序数组
@@ -147,7 +154,40 @@ void merge(vector<int>& vec, int L, int M, int R) {
 		vecHelp.push_back(vec[p2++]);
 	}
 	// 将辅助向量中的元素复制回原数组，完成合并操作
-	for (int i = 0; i < vecHelp.size(); ++i) {
+	for (size_t i = 0; i < vecHelp.size(); ++i) {
 		vec[L + i] = vecHelp[i];
 	}
+}
+
+void Bubble_Sort(vector<int>& vec) {//冒泡排序
+	for (size_t i = 0; i < vec.size() - 1; i++) {
+		for (size_t j = 0; j < vec.size() - 1; j++) {
+			if (vec[j] >= vec[j + 1]) {
+				swap(vec[j], vec[j + 1]);
+			}
+		}
+	}
+}
+
+void Selection_Sort(vector<int>& vec) {//选择排序
+	size_t i, j, min=0;
+	for (i = 0; i < vec.size() - 1; i++) {
+		min = i;
+		for (j = i + 1; j < vec.size(); j++) {
+			if (vec[j] < vec[min]) {
+				min = j;
+			}
+		}
+		if (vec[i] != vec[min]) swap(vec[i], vec[min]);
+	}
+}
+//4 5 3 6 9 2 
+int insertionSort(vector<int>& vec) {//插入排序(比上面好一点，不一定固定的O(N^2))
+	if (vec.size() == 0)return 0;
+	for (size_t i = 1; i < vec.size(); i++) {
+		for (rsize_t j = i; j > 0 && vec[j] < vec[j - 1]; j--) {
+			swap(vec[j], vec[j - 1]);
+		}
+	}
+	return 1;
 }
