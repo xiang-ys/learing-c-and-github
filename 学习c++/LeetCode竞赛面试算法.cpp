@@ -3,6 +3,7 @@
 #include<chrono>  // ÓÃÓÚ¸ß·Ö±æÂÊÊ±ÖÓ
 #include<vector>   //Êı×é£¬µ«ÊÇ¿ÉÒÔ×Ô¶¨Òå³¤¶È
 #include<stdlib.h>
+#include<ctime>
 using namespace std;
 
 // µİ¹éĞĞÎªµÄÊ±¼ä¸´ÔÓ¶È¹ÀËã(master¹«Ê½)
@@ -15,6 +16,7 @@ void swap(int& a, int &b);//Ê¹ÓÃÒì»ò½»»»a£¬bÎ»ÖÃ(¶¶»úÁéËã·¨) ¡°Èç¹û´«ÈëÏàÍ¬µÄÊı¾
 int printOddTimeNum1();//ÎÊÌâ:ÓĞÒ»¸öÊı×ÖÔÚÊı×é³öÏÖÆæÊı´Î£¬ÆäËû¶¼³öÏÖÅ¼Êı´Î,ÇóÆæÊı
 int printOddTimeNum2();//ÎÊÌâ:ÓĞÁ½¸öÊı×ÖÔÚÊı×é³öÏÖÆæÊı´Î£¬ÆäËû¶¼³öÏÖÅ¼Êı´Î,ÇóÆæÊı
 int generateRandomArray(vector<int>& vec,int maxSize,int maxValue);//¶ÔÊıÆ÷,maxSize×î´ó³¤¶È£¬maxValue×î´óÊı¾İ
+bool CompareData(vector<int>& vec1, vector<int>& vec2);//¶Ô±ÈÁ½¸öÅÅĞòºóÊı¾İÊÇ·ñÒ»ÖÂ
 int process(vector<int>& vec, int L, int R);//ÓÃµİ¹éÔÚvecÊı×éÉÏÇó×î´óÖµ,ÓÃÀ´Àí½â¹é²¢ÅÅĞò
 int MergeSort(vector<int>& vec, int L, int R);//¹é²¢ÅÅĞòT(n*logn) Ã»ÓĞÀË·Ñ±È½Ï×ÊÔ´
 void merge(vector<int>& vec,int L,int M,int R);//¹é²¢ÅÅĞòµÄºÏ²¢×óÓÒÁ½¸öÊı×é
@@ -23,6 +25,11 @@ void Selection_Sort(vector<int>& vec);//Ñ¡ÔñÅÅĞòO(n^2)
 int insertionSort(vector<int>& vec);//²åÈëÅÅĞòO(n^2)(±ÈÃ°ÅİÑ¡ÔñºÃÒ»µã£¬²»Ò»¶¨¹Ì¶¨µÄO(n^2))
 int smallSum(vector<int>& vec,int L,int R);//ÎÊÌâ:ÓĞÒ»¸öÊı×é£¬ÆäÖĞ×ó±ßÃ¿Ò»¸öĞ¡ÓÚÕâ¸öÊıµÄÊıÀÛ¼ÓÆğÀ´½Ğ×öĞ¡ºÍ£¬ÇóÊı×éµÄËùÓĞĞ¡ºÍ¼ÓÆğÀ´µÄÊıÖµ
 int smallSum_merge(vector<int>& vec, int L, int M, int R); //ÓÃ¹é²¢ÅÅĞòËã·¨½â¾ösmallSumÎÊÌâ
+int ReverseOrderPairs(vector<int>& vec, int L, int R);//¹é²¢ÅÅĞò½â¾öÕÒ³öÄæĞòÊı
+int ReverseOrderPairs_merge(vector<int>& vec, int L, int M, int R);//¹é²¢ÅÅĞò¶ÔÄæĞòÊı
+void quickSort(vector<int>& vec, int L, int R);//¿ìËÙÅÅĞò
+vector<int> partiton(vector<int>& vec, int L, int R);//¿ìËÙÅÅĞò·µ»ØÊı×é×óÓÒ±ß½çÎ»ÖÃ
+void heapInsert(vector<int>& vec, int index);//¶ÑÉÏ¸¡
 template<typename T>
 void generateRandomVector(std::vector<T>& vec, int maxSize, T minValue, T maxValue);//´óÀĞµÄ¶ÔÊıÆ÷
 
@@ -34,38 +41,56 @@ int main() {
 	cout << printOddTimeNum1()<<endl;
 	printOddTimeNum2();*/
 	vector<int> vec1,vec2,vec3;
-	for (int i = 0; i < 5; i++) {
-		generateRandomArray(vec1, 10, 20);
+	for (int i = 0; i < 1; i++) {
+		generateRandomArray(vec1, 6, 30);
 		vec2 = vector<int>(vec1.size(), -1);
 		vec3 = vector<int>(vec1.size(), -1);
-		cout << "Ô­Êı×éÎª£º";
-		for (int num : vec1) {//±éÀúvec1
-			cout << num << " ";
-		}
+		//cout << "Ô­Êı×éÎª£º";
+		//for (int num : vec1) {//±éÀúvec1
+		//	cout << num << " ";
+		//}
 		cout << "\n";
 		copy(vec1.begin(), vec1.end(), vec2.begin());//vec2¸´ÖÆvec1
 		copy(vec1.begin(), vec1.end(), vec3.begin());//vec3¸´ÖÆvec1
-		//MergeSort(vec1, 0, vec1.size()-1);//¹é²¢
+		MergeSort(vec1, 0, vec1.size()-1);//¹é²¢
 		//Bubble_Sort(vec2);//Ã°Åİ
 		//Selection_Sort(vec2);//Ñ¡Ôñ
 		//insertionSort(vec3);//²åÈë
-		//cout << "ÅÅĞòºóÎª£º";
+		//ReverseOrderPairs(vec1, 0, vec1.size() - 1);//¹é²¢ÅÅĞò½â¾öÕÒ³öÄæĞòÊı
+		quickSort(vec2, 0, vec2.size() - 1);//¿ìËÙ
+		//cout << "vec1ÅÅĞòºóÎª£º";
 		//for (int num : vec1) {//±éÀú
 		//	cout << num << " ";
 		//}
+		//cout << "\n";
+		//cout << "vec2ÅÅĞòºóÎª£º";
+		//for (int num : vec2) {//±éÀú
+		//	cout << num << " ";
+		//}
 		/*cout << "×î´óÖµÎª"<<process(vec1, 0, vec1.size()-1);*/
-		cout<<"Ğ¡ºÍÎª£º"<< smallSum(vec1, 0, vec1.size() - 1);
+		/*cout<<"Ğ¡ºÍÎª£º"<< smallSum(vec1, 0, vec1.size() - 1);*/
+		if (CompareData(vec1, vec2)) {//¶Ô±ÈÊı¾İ
+			cout << "³öÏÖ´íÎó£¡Êı¾İ²»Ò»ÖÂ£¡";
+			break;
+		}
 		cout << "\n";
+		cout << "\n";
+	}
+	system("cls");
+	if (!CompareData(vec1, vec2)) {//¶Ô±ÈÊı¾İ
+		cout << "Êı¾İÒ»ÖÂ";
 	}
 	return 0;
 }
 
 void swap(int& a, int& b) {//Ê¹ÓÃÒì»ò½»»»a£¬bÎ»ÖÃ  ¡°Èç¹û´«ÈëÏàÍ¬µÄÊı¾İ»á¹éÎª0£¡£¡¡±
 	/*Òì»òÓï¾ä»ù±¾¹æÔò
-    a^a=0;0^a=a;*/
-	a = a ^ b;
-	b = a ^ b;
-	a = a ^ b;
+    a^a=0;0^a=a;ËùÒÔa£¬bÏàµÈ»áµÈÓÚ0*/
+	if (a != b) {
+		a = a ^ b;
+		b = a ^ b;
+		a = a ^ b;
+	}
 }
 
 //ÓĞÒ»¸öÊı×Ö³öÏÖÆæÊı´Î£¬ÆäËû¶¼³öÏÖÅ¼Êı´Î
@@ -100,7 +125,7 @@ int printOddTimeNum2() {
 	return eor;
 }
 
-int generateRandomArray(vector<int>& vec,int maxSize, int maxValue) {//ÎÒ×Ô¸ö¶ùĞ´µÄ¶ÔÊıÆ÷£¬Ö»²»¹ıÊÇ¶Ô´óÀĞµÄ×¾ÁÓÄ£·Â°ÕÁË
+int generateRandomArray(vector<int>& vec,int maxSize, int maxValue) {//ÎÒ×Ô¸ö¶ùĞ´µÄ¶ÔÊıÆ÷,ÊµÏÖÉú³ÉËæ»ú³¤¶ÈºÍËæ»úÊıÖµµÄÊı×é
 	unsigned seed = chrono::high_resolution_clock::now().time_since_epoch().count();
 	static default_random_engine e(seed);
 	static uniform_int_distribution<unsigned> u(1, maxValue);//Õâ¸öÊÇËæ»úÊıÒıÇæÉú³ÉËæ»úÊı,ÏŞÖÆ×î´óÊıÖµ
@@ -112,6 +137,15 @@ int generateRandomArray(vector<int>& vec,int maxSize, int maxValue) {//ÎÒ×Ô¸ö¶ùĞ
 		/* *it ÓÃÓÚ·ÃÎÊ it µ±Ç°Ö¸ÏòµÄÔªËØµÄÖµ¡£*/
 	}
 	return 0;
+}
+
+bool CompareData(vector<int>& vec1, vector<int>& vec2) {
+	for (size_t i = 0; i < vec1.size(); i++) {
+		if (vec1[i] != vec2[i]) {
+			return true;
+		}
+	}
+	return false;
 }
 
 template<typename T>
@@ -237,4 +271,76 @@ int smallSum_merge(vector<int>& vec, int L, int M, int R) {
 	vecHelp.clear();
 	vector<int>().swap(vecHelp);
 	return res;
+}
+
+int ReverseOrderPairs(vector<int>& vec, int L, int R) {
+	if (L >= R)return 0;
+	int mid = L + ((R - L) >> 1);
+	ReverseOrderPairs(vec, L, mid);
+	ReverseOrderPairs(vec, mid + 1, R);
+	ReverseOrderPairs_merge(vec, L, mid, R);
+	return 1;
+}
+
+int ReverseOrderPairs_merge(vector<int>& vec,int L,int M,int R){
+	vector<int> vecHelp;
+	int p1 = L;
+	int p2 = M + 1;
+	while (p1 <= M && p2 <= R) {
+		if (vec[p1] <= vec[p2]) {
+			vecHelp.push_back(vec[p1++]);
+		}
+		else {//vec[p1]>vec[p2]
+			for (int i = p1; i <= p2 - 1; i++) {
+				if(vec[i]>vec[p2])
+				cout << "ÄæĞòÊı¶Ô: (" << vec[i] << ", " << vec[p2] << ")" << endl;
+			}
+			vecHelp.push_back(vec[p2++]);
+		}
+	}
+	 while (p1 <= M) {
+		 vecHelp.push_back(vec[p1++]);
+	 }
+	 while (p2 <= R){
+		 vecHelp.push_back(vec[p2++]);
+	 }
+	 for (rsize_t i = 0; i < vecHelp.size(); i++) {
+		 vec[L + i] = vecHelp[i];
+	 }
+	 return 1;
+}
+
+void quickSort(vector<int>& vec, int L, int R) {
+	if (L < R) {
+		srand((size_t)time(0));
+		int choosePivot = rand() % (R - L + 1) + L;
+		swap(vec[choosePivot], vec[R]);
+		vector<int> p = partiton(vec, L, R);
+		quickSort(vec, L, p[0] - 1);
+		quickSort(vec, p[1] + 1, R);
+	}
+}
+vector<int> partiton(vector<int>& vec, int L, int R) {
+	int less = L - 1; // <ÇøÓÒ±ß½ç
+	int more = R; // >Çø×ó±ß½ç
+	while (L < more) {
+		if (vec[L] < vec[R]) {
+			swap(vec[++less], vec[L++]);
+		}
+		else if (vec[L] > vec[R]) {
+			swap(vec[--more], vec[L]);
+		}
+		else {
+			L++;
+		}
+	}
+	swap(vec[R], vec[more]);
+	return {less + 1, more};
+}
+
+void heapInsert(vector<int>& vec, int index) {//¶ÑÉÏ¸¡
+	while (vec[index] > vec[(index - 1) / 2]){
+		swap(vec[index], vec[(index - 1) / 2]);
+		index = (index - 1) / 2;
+	}
 }
