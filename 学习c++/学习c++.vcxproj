@@ -130,6 +130,7 @@
     <ClCompile Include="双向链表.cpp" />
     <ClCompile Include="LeetCode竞赛面试算法.cpp" />
     <ClCompile Include="栈.cpp" />
+    <ClCompile Include="线性栈及其算法.cpp" />
     <ClCompile Include="线性表.cpp" />
     <ClCompile Include="线性表模版.cpp" />
     <ClCompile Include="链表.cpp" />
