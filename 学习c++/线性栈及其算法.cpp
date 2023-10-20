@@ -1,7 +1,13 @@
 #include <iostream>
 #include <vector>
-#include <stdlib.h>
 using namespace std;
+
+template<typename T>
+class Stack;//线性栈及其函数初始化
+void Conversion(Stack<int>& vec, int num, int n);//十进制转换沉n进制
+bool CheckBracket(const string& s);//判断括号列表是否输入正确
+
+
 
 template<typename T>
 class Stack {
@@ -12,7 +18,7 @@ public:
     void push(const T& value) {
         data.push_back(value);
     }
-    // 出栈操作
+    // 出栈同时获取顶部元素
     T pop() {
         if (!isEmpty()) {
             T n = data.back();
@@ -20,17 +26,7 @@ public:
             return n;
         }
         else {
-            std::cout << "栈为空，无法出栈。" << std::endl;
-        }
-    }
-    // 获取栈顶元素
-    T top() const {
-        if (!isEmpty()) {
-            return data.back();
-        }
-        else {
-            std::cerr << "栈为空。" << std::endl;
-            exit(0);  // 在实际应用中，你可能希望用其他方式处理这种情况，比如抛出一个异常。
+            cout << "栈为空，无法出栈。" << endl;
         }
     }
     // 判断栈是否为空
@@ -42,6 +38,26 @@ public:
         return data.size();
     }
 };
+
+int main() {
+    int num, n;
+    Stack<int> stack; //对象 
+    string s;
+    cout << "请输入十进制数" << endl;
+    cin >> num;
+    cout << "请输入你要转换的n进制" << endl;
+    cin >> n;
+    Conversion(stack, num, n);
+    cout << "请输入一个括号列表，判断是否正确" << endl;
+    cin >> s;
+    if (CheckBracket(s)) {
+        cout << "输入正确！";
+    }
+    else {
+        cout << "输入错误！";
+    }
+    return 0;
+}
 
 void Conversion(Stack<int>& vec, int num, int n) {//将十进制转换成n进制 
     // 如果输入的十进制数是0，直接输出0
@@ -61,7 +77,7 @@ void Conversion(Stack<int>& vec, int num, int n) {//将十进制转换成n进制
     cout << endl;
 }
 
-bool CheckBracket(const string& s) {
+bool CheckBracket(const string& s) {//判断括号是否使用正确
     Stack<char> stack;
     for (char a : s) {
         if (a == '(' || a == '[' || a == '{') {
@@ -86,22 +102,3 @@ bool CheckBracket(const string& s) {
     return stack.isEmpty();
 }
 
-int main() {
-    int num, n;
-    Stack<int> stack; //对象 
-    string s;
-    cout << "请输入十进制数" << endl;
-    cin >> num;
-    cout << "请输入你要转换的n进制" << endl;
-    cin >> n;
-    Conversion(stack, num, n);
-    cout << "请输入一个括号列表，判断是否正确" << endl;
-    cin >> s;
-    if (CheckBracket(s)) {
-        cout << "输入正确！";
-    }
-    else{
-        cout << "输入错误！";
-    }
-    return 0;
-}

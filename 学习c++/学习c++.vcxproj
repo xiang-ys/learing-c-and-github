@@ -134,6 +134,7 @@
     <ClCompile Include="线性表.cpp" />
     <ClCompile Include="线性表模版.cpp" />
     <ClCompile Include="链表.cpp" />
+    <ClCompile Include="循环队列.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
