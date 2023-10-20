@@ -75,6 +75,6 @@ int main() {
     q.enqueue(6);
     q.enqueue(7);  // 此操作会尝试入队，但由于队列已满，会打印错误信息
     q.dequeue();  // 出队操作
-    q.enqueue(7);
+    q.enqueue(7); //出队后可以入队，不会报错
     return 0;
 }

@@ -2,13 +2,8 @@
 #include <vector>
 using namespace std;
 
-template<typename T>
-class Stack;//线性栈及其函数初始化
 void Conversion(Stack<int>& vec, int num, int n);//十进制转换沉n进制
 bool CheckBracket(const string& s);//判断括号列表是否输入正确
-
-
-
 template<typename T>
 class Stack {
 private:
@@ -77,28 +72,48 @@ void Conversion(Stack<int>& vec, int num, int n) {//将十进制转换成n进制
     cout << endl;
 }
 
-bool CheckBracket(const string& s) {//判断括号是否使用正确
+// 函数名：CheckBracket
+// 功能：检查给定的字符串s中的括号是否正确配对
+// 参数：s - 待检查的字符串
+// 返回值：如果括号正确配对返回true，否则返回false
+bool CheckBracket(const string& s) {
+    // 使用字符堆栈来保存尚未配对的左括号
     Stack<char> stack;
+    // 遍历给定的字符串中的每个字符
     for (char a : s) {
+        // 如果当前字符是一个左括号，将其压入堆栈
         if (a == '(' || a == '[' || a == '{') {
             stack.push(a);
         }
+
+        // 如果当前字符是右圆括号
         if (a == ')') {
+            // 检查堆栈是否为空（表示没有匹配的左括号）
+            // 或堆栈的顶部元素不是对应的左圆括号
+            // 如果是这样，则返回false
             if (stack.isEmpty() || stack.pop() != '(') {
                 return false;
             }
         }
+
+        // 如果当前字符是右方括号
         if (a == ']') {
+            // 同样地，检查堆栈是否有匹配的左方括号
             if (stack.isEmpty() || stack.pop() != '[') {
                 return false;
             }
         }
+
+        // 如果当前字符是右大括号
         if (a == '}') {
+            // 检查堆栈是否有匹配的左大括号
             if (stack.isEmpty() || stack.pop() != '{') {
                 return false;
             }
         }
     }
+    // 在遍历完整个字符串后，确保堆栈是空的
+    // 这意味着所有的左括号都找到了它们的匹配右括号
     return stack.isEmpty();
 }
 
