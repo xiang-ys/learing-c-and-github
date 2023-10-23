@@ -4,6 +4,8 @@
 #include<vector>   //Êı×é£¬µ«ÊÇ¿ÉÒÔ×Ô¶¨Òå³¤¶È
 #include<stdlib.h>
 #include<ctime>
+#include<algorithm>//ÓÃÀ´Çóvector×î´óÖµ
+#include<cmath>//ÊıÑ§¼ÆËã
 using namespace std;
 
 // µİ¹éĞĞÎªµÄÊ±¼ä¸´ÔÓ¶È¹ÀËã(master¹«Ê½)
@@ -11,6 +13,8 @@ using namespace std;
 // 1)log(b, a) > d -> ¸´ÔÓ¶ÈÎªO(N^log(b, a))ÒÔbÎªµ×
 // 2)log(b, a) = d -> ¸´ÔÓ¶ÈÎªO(N^d * logN)
 // 3)log(b, a) < d -> ¸´ÔÓ¶ÈÎªO(N^d)
+
+//ÓĞµÄËã·¨£¬ÏµÍ³ÓĞ±ê×¼¿â£¬µ«ÊÇÊÇ¸öºÚºĞ£¬ÎŞ·¨ÔÚÄÚ²¿×öµ÷Õû£¬µ«ÊÇÆóÒµ¿ª·¢µÄÊ±ºòÓĞ¿ÉÄÜÒª¾«ÃÜµ÷ÊÔ£¬ËùÒÔ¶¼ÒªÑ§
 
 void swap(int& a, int &b);//Ê¹ÓÃÒì»ò½»»»a£¬bÎ»ÖÃ(¶¶»úÁéËã·¨) ¡°Èç¹û´«ÈëÏàÍ¬µÄÊı¾İ»á¹éÎª0£¡£¡¡±
 int printOddTimeNum1();//ÎÊÌâ:ÓĞÒ»¸öÊı×ÖÔÚÊı×é³öÏÖÆæÊı´Î£¬ÆäËû¶¼³öÏÖÅ¼Êı´Î,ÇóÆæÊı
@@ -32,6 +36,11 @@ vector<int> partiton(vector<int>& vec, int L, int R);//¿ìËÙÅÅĞò·µ»ØÊı×é×óÓÒ±ß½çÎ
 void heapInsert(vector<int>& vec, int index);//¶ÑÉÏ¸¡
 void heapify(vector<int>& vec, int index, int heapsize);//¶ÑÏÂ³Á
 void heapSort(vector<int>& vec);//¶ÑÅÅĞòO(N*logN)
+int getDigit(int num, int d); //»ñµÃÊ®½øÖÆdÎ»µÄÊı×Ö
+int maxits(vector<int>& vec);//»ñµÃÊı×é×î´óÖµµÄÎ»Êı
+void radixSort(vector<int>& vec);//Í°ÅÅĞòÖ÷º¯Êı
+void radixSort(vector<int>& vec, int L, int R, int digit);//Í°ÅÅĞò
+
 template<typename T>
 void generateRandomVector(std::vector<T>& vec, int maxSize, T minValue, T maxValue);//´óÀĞµÄ¶ÔÊıÆ÷
 
@@ -43,7 +52,7 @@ int main() {
 	cout << printOddTimeNum1()<<endl;
 	printOddTimeNum2();*/
 	vector<int> vec1,vec2,vec3;
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 5; i++) {
 		generateRandomArray(vec1, 6, 30);
 		vec2 = vector<int>(vec1.size(), -1);
 		vec3 = vector<int>(vec1.size(), -1);
@@ -61,6 +70,7 @@ int main() {
 		//ReverseOrderPairs(vec1, 0, vec1.size() - 1);//¹é²¢ÅÅĞò½â¾öÕÒ³öÄæĞòÊı
 		quickSort(vec2, 0, vec2.size() - 1);//¿ìËÙ
 		heapSort(vec1);//¶ÑÅÅĞò
+		radixSort(vec3);//Í°ÅÅĞò
 		cout << "vec1ÅÅĞòºóÎª£º";
 		for (int num : vec1) {//±éÀú
 			cout << num << " ";
@@ -68,6 +78,11 @@ int main() {
 		cout << "\n";
 		cout << "vec2ÅÅĞòºóÎª£º";
 		for (int num : vec2) {//±éÀú
+			cout << num << " ";
+		}
+		cout << "\n";
+		cout << "vec3ÅÅĞòºóÎª£º";
+		for (int num : vec3) {//±éÀú
 			cout << num << " ";
 		}
 		/*cout << "×î´óÖµÎª"<<process(vec1, 0, vec1.size()-1);*/
@@ -311,7 +326,7 @@ int ReverseOrderPairs_merge(vector<int>& vec,int L,int M,int R){
 	 return 1;
 }
 
-void quickSort(vector<int>& vec, int L, int R) {
+void quickSort(vector<int>& vec, int L, int R) {//¿ìËÙÅÅĞò
 	if (L < R) {
 		srand((size_t)time(0));
 		int choosePivot = rand() % (R - L + 1) + L;
@@ -339,14 +354,14 @@ vector<int> partiton(vector<int>& vec, int L, int R) {
 	return {less + 1, more};
 }
 
-void heapInsert(vector<int>& vec, int index) {  //¶ÑÉÏ¸¡,×Ó¼¶±È¸¸¼¶´ó£¬¶ÑÌí¼ÓÔªËØÊ±ÓÃ
+void heapInsert(vector<int>& vec, int index) {  //¶ÑÉÏ¸¡,×Ó¼¶±È¸¸¼¶´ó£¬¶ÑÌí¼ÓÔªËØÊ±ÓÃ£¬²åÈë
 	while (vec[index] > vec[(index - 1) / 2]){
 		swap(vec[index], vec[(index - 1) / 2]);
 		index = (index - 1) / 2;
 	}
 }
 
-void heapify(vector<int>& vec, int index, int heapsize) {   //¶ÑÏÂ³Á£¬¸¸¼¶±È×Ó¼¶Ğ¡,¶ÑÅÅĞòÊ×Î²½»»»Ê±ÓÃ
+void heapify(vector<int>& vec, int index, int heapsize) {   //¶ÑÏÂ³Á£¬¸¸¼¶±È×Ó¼¶Ğ¡
 	int left = index * 2 + 1; //×óº¢×ÓµÄÏÂ±ê
 	while (left < heapsize){ //Èç¹û×ó±ßÓĞº¢×ÓµÄ»°
 		//ÓÒº¢×Ó´æÔÚµÄÊ±ºò£¬½«Á½¸öº¢×ÓµÄ×î´óÖµµÄÏÂ±ê¸³¸ømax£¬²»´æÔÚÓÒº¢×ÓÖ±½Ó°Ñ×óº¢×ÓÏÂ±ê¸³Öµ¸ømax
@@ -365,12 +380,58 @@ void heapSort(vector<int>& vec) {//¶ÑÅÅĞò
 		return;
 	}
 	for (int i = 0; i < vec.size(); i++) {
-		heapInsert(vec, i);
+		heapInsert(vec, i);//¶ÑÉÏ¸¡
 	}
 	int heapsize = vec.size();
 	swap(vec[0], vec[--heapsize]);
 	while (heapsize > 0) {
 		heapify(vec, 0, heapsize);
 		swap(vec[0], vec[--heapsize]);
+	}
+}
+
+int maxits(vector<int>& vec) {//»ñµÃvecÊı×é×î´óÖµµÄÎ»Êı
+	int max = *max_element(vec.begin(), vec.end());//ÓÃinclude<algorithm>µÄ·½·¨,O(N)
+	int res = 0;
+	while (max != 0) {
+		res++;
+		max /= 10;
+	}
+	return res;
+}
+
+void radixSort(vector<int>& vec) {//Í°ÅÅĞòÖ÷º¯Êı
+	if (vec.empty() || vec.size() < 2) {
+		return;
+	}
+	radixSort(vec, 0, vec.size() - 1, maxits(vec));//maxits(vec)´«Èë×î´óµÄÊıµÄÎ»Êı
+}
+
+int getDigit(int num, int d) { //»ñµÃÊ®½øÖÆ¾ø¶ÔÖµdÎ»µÄÊı×Ö
+	if (d < 0)exit(0);
+	return abs(num) / static_cast<int>(pow(10,d - 1)) % 10;
+}
+
+void radixSort(vector<int>& vec, int L, int R, int digit){ //Í°ÅÅĞò
+	static int radix = 10; //Í°µÄ¸öÊı
+	int i = 0, j = 0;
+	vector<int> bucket(R - L + 1); //¸¨Öú¿Õ¼ä,ÓĞ¶àÉÙÊı¾ÍÕû¶àÉÙ¸ö
+	for (int d = 1; d <= digit; d++) {
+		vector<int> count(radix); //Í°
+		for (i = L; i <= R; i++) { //±éÀúÍ³¼ÆdÎ»ÓĞ¶àÉÙ¸ö
+			j = getDigit(vec[i], d);
+			count[j]++;
+		}
+		for (i = 1; i < radix; i++) { //ÈÃÍ°ÀïÃæËùÍ³¼ÆµÄdÎ»µÄj¸öÊı±ä³É<=jÓĞ¶àÉÙ¸ö
+			count[i] = count[i] + count[i - 1];
+		}
+		for (i = R; i >= L; i--) { //½«j·ÅÔÚcount[j]-1µÄÉÏ£¬ÊµÏÖÏÈ½øÏÈ³ö
+			j = getDigit(vec[i], d);
+			bucket[count[j] - 1] = vec[i];
+			count[j]--;
+		}
+		for (i = L, j = 0; i <= R; i++, j++) { //½«¸¨Öú¿Õ¼äµÄÊı×é·Åµ½ÒªÅÅĞòµÄÊı×é
+			vec[i] = bucket[j];
+		}
 	}
 }
